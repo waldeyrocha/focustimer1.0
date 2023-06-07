@@ -50,6 +50,9 @@ const stopper = () => {
   buttonSet.classList.remove("hide");
   play.classList.remove("hide");
   pause.classList.add("hide");
+  audio.loop = false;
+  audio.pause();
+  audio.currentTime = 0;
   clearInterval(interval);
   secondsDisplay.textContent = String(0).padStart(2, "0");
   minutesDisplay.textContent = String(0).padStart(2, "0");
@@ -60,9 +63,21 @@ const player = () => {
   pause.classList.remove("hide");
   buttonSet.classList.add("hide");
   stop.classList.remove("hide");
+  audio.loop = true;
+  audio.play();
   const countdown = () => {
     let seconds = parseInt(secondsDisplay.textContent);
     let minutes = parseInt(minutesDisplay.textContent);
+
+    if (seconds === 0 && minutes === 0) {
+
+      alert("Acabou o tempo!");
+      clearInterval(interval);
+      audio.loop = false;
+      audio.pause();
+      stopper();
+      return;
+    }
 
     if (seconds > 0) {
       seconds--;
@@ -81,10 +96,13 @@ const player = () => {
 const pauser = () => {
   pause.classList.add("hide");
   play.classList.remove("hide");
+  audio.loop = false;
+  audio.pause();
+  audio.currentTime = 0;
   clearInterval(interval);
 };
 
-//eventos
+//events
 play.addEventListener("click", player);
 
 pause.addEventListener("click", pauser);
